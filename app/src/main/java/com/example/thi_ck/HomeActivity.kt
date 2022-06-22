@@ -18,8 +18,6 @@ import com.squareup.picasso.Picasso
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var uid:String
-    private lateinit var  image_user:ImageView
-    private val db = FirebaseFirestore.getInstance().collection("users")
     private lateinit var handle:HandleAction
 
     private lateinit var intent:Any
@@ -28,7 +26,6 @@ class HomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
         supportActionBar?.title = "Messenger"
-        image_user=findViewById(R.id.image_user)
         handle = HandleAction()
         handle.handleVerifyUserIsLogged(this)
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
@@ -37,20 +34,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        val btn = findViewById<Button>(R.id.btn_logout)
-
-        btn.setOnClickListener {
-           val db = FirebaseFirestore.getInstance().collection("friends")
-            db.document(FirebaseAuth.getInstance().uid.toString())
-                .set(hashMapOf("list_friends" to listOf<String>("duong","quy","phuoc")))
-                .addOnSuccessListener {
-                    Log.d("Home","Success..")
-                }
-                .addOnFailureListener {
-                    Log.d("Home","Failed...")
-                }
-        }
 
     }
 

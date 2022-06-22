@@ -45,7 +45,7 @@ class SearchActivity:AppCompatActivity() {
 
 
             val capitalCities = db.collection("users")
-                .whereEqualTo("username", search_input.text.toString())
+                .whereEqualTo("username", search_input.text.toString().trim())
                 capitalCities.get()
                     .addOnSuccessListener {
                         for (document in it.documents) {

@@ -4,7 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.thi_ck.Class.Chat
 import com.example.thi_ck.Class.ChatItem
+import com.example.thi_ck.Class.User
+import com.example.thi_ck.ItemAdapter.ChatAdapter
 import com.example.thi_ck.LoginActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -55,14 +59,27 @@ class HandleAction {
     }
 
     fun handleSendMessage(fromID:String, message:String, toID:String, date: Long) {
-        val db = FirebaseFirestore.getInstance().collection("message")
+        val fromReference = FirebaseFirestore.getInstance().collection("messages").document(fromID).collection(toID)
         val messageItem = ChatItem(fromID, message, toID, date)
-        db.add(messageItem)
+        fromReference.add(messageItem)
             .addOnSuccessListener {
-                Log.d("Chat", "Save success... ${db.id}")
+                Log.d("Chat","Save mess from success....")
             }
             .addOnFailureListener {
-                Log.d("Chat", "Save failed... ${it.message}")
+                Log.d("Chat","Save failed....")
+            }
+        val toReference = FirebaseFirestore.getInstance().collection("messages").document(toID).collection(fromID)
+        toReference.add(messageItem)
+            .addOnSuccessListener {
+                Log.d("Chat","Save mess to success....")
+            }
+            .addOnFailureListener {
+                Log.d("Chat","Save failed....")
             }
     }
+
+//    fun handleProcessChatMessage(user:User):ArrayList<Chat> {
+//
+//        return listChat
+//    }
 }

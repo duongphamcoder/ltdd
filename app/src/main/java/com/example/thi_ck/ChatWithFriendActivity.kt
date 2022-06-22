@@ -37,8 +37,8 @@ class ChatWithFriendActivity:AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        // lắng nghe sự thay đổi của các document trong collection users
-        val db = FirebaseFirestore.getInstance().collection("message")
+//        // lắng nghe sự thay đổi của các document trong collection messages
+        val db = FirebaseFirestore.getInstance().collection("messages").document(FirebaseAuth.getInstance()?.uid.toString()).collection(user.uid)
         db.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w("Chat", "Listen failed.", e)
@@ -46,20 +46,20 @@ class ChatWithFriendActivity:AppCompatActivity() {
             }
 
             if (snapshot != null) {
-                val dataset:ArrayList<Chat> = ArrayList()
-//                snapshot.documents.sortBy { it["date"] as Date }
-                var listData = snapshot.documents
-                listData.sortBy { it["date"] as Long }
-                for(item in listData) {
-                   if (item["fromID"].toString().equals(FirebaseAuth.getInstance()?.uid.toString())) {
-                       dataset.add(Chat(user.uri_image,item["message"].toString(),0))
-                   }
-                    else {
-                       dataset.add(Chat(user.uri_image,item["message"].toString(),1))
-                   }
+              val listTemp = snapshot.documents
+                listTemp.sortBy {
+                    it["date"] as Long
                 }
-
-                adapter = ChatAdapter(dataset)
+                val listChat = ArrayList<Chat>()
+                for (item in listTemp) {
+                    if (item["fromID"].toString().equals(FirebaseAuth.getInstance()?.uid.toString())) {
+                        listChat.add(Chat(user.uri_image, item["message"].toString(),0))
+                    }
+                    else {
+                        listChat.add(Chat(user.uri_image, item["message"].toString(),1))
+                    }
+                }
+                adapter = ChatAdapter(listChat)
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 recyclerView.adapter = adapter
             } else {
