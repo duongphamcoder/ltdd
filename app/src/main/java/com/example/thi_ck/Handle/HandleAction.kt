@@ -10,6 +10,7 @@ import com.example.thi_ck.Class.ChatItem
 import com.example.thi_ck.Class.User
 import com.example.thi_ck.ItemAdapter.ChatAdapter
 import com.example.thi_ck.LoginActivity
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -58,7 +59,7 @@ class HandleAction {
         }
     }
 
-    fun handleSendMessage(fromID:String, message:String, toID:String, date: Long) {
+    fun handleSendMessage(fromID:String, message:String, toID:String, date: Timestamp) {
         val fromReference = FirebaseFirestore.getInstance().collection("messages").document(fromID).collection(toID)
         val messageItem = ChatItem(fromID, message, toID, date)
         fromReference.add(messageItem)

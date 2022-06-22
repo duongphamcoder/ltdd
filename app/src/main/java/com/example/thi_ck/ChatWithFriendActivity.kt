@@ -11,8 +11,10 @@ import com.example.thi_ck.Class.Chat
 import com.example.thi_ck.Class.User
 import com.example.thi_ck.Handle.HandleAction
 import com.example.thi_ck.ItemAdapter.ChatAdapter
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -38,7 +40,7 @@ class ChatWithFriendActivity:AppCompatActivity() {
         super.onStart()
 
 //        // lắng nghe sự thay đổi của các document trong collection messages
-        val db = FirebaseFirestore.getInstance().collection("messages").document(FirebaseAuth.getInstance()?.uid.toString()).collection(user.uid)
+        val db = FirebaseFirestore.getInstance().collection("messages").document(FirebaseAuth.getInstance()?.uid.toString()).collection(user.uid).orderBy("date",Query.Direction.ASCENDING)
         db.addSnapshotListener { snapshot, e ->
             if (e != null) {
                 Log.w("Chat", "Listen failed.", e)
@@ -47,9 +49,9 @@ class ChatWithFriendActivity:AppCompatActivity() {
 
             if (snapshot != null) {
               val listTemp = snapshot.documents
-                listTemp.sortBy {
-                    it["date"] as Long
-                }
+//                listTemp.sortBy {
+//                    it["date"].toString().toLong()
+//                }
                 val listChat = ArrayList<Chat>()
                 for (item in listTemp) {
                     if (item["fromID"].toString().equals(FirebaseAuth.getInstance()?.uid.toString())) {
@@ -70,7 +72,7 @@ class ChatWithFriendActivity:AppCompatActivity() {
 
         btn_send_mess.setOnClickListener {
             handleAction.handleSendMessage(FirebaseAuth.getInstance()?.uid.toString(),edittext_mess.text.toString(), user.uid,
-                Date().time
+                Timestamp(Date())
             )
             edittext_mess.setText("")
         }
