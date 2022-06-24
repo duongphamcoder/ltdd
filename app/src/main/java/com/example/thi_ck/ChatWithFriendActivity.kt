@@ -46,7 +46,6 @@ class ChatWithFriendActivity:AppCompatActivity() {
                 Log.w("Chat", "Listen failed.", e)
                 return@addSnapshotListener
             }
-
             if (snapshot != null) {
               val listTemp = snapshot.documents
 //                listTemp.sortBy {

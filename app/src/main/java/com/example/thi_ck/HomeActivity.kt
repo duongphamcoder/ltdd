@@ -2,6 +2,7 @@ package com.example.thi_ck
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
@@ -14,7 +15,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.thi_ck.Handle.HandleAction
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
+import java.util.concurrent.CompletableFuture
 
 class HomeActivity : AppCompatActivity() {
     private lateinit var uid:String
@@ -30,10 +33,30 @@ class HomeActivity : AppCompatActivity() {
         handle.handleVerifyUserIsLogged(this)
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
 
+
+
+        val db = FirebaseFirestore.getInstance().collection("users")
+        db.get()
+            .addOnSuccessListener {
+                val listChatWithFriends = ArrayList<Any>()
+//                Log.d("Home", "${listChatWithFriends}")
+               for (item in it.documents) {
+                   val x = FirebaseFirestore.getInstance().collection("messages").document(uid).collection(item["uid"].toString()).orderBy("date",Query.Direction.DESCENDING)
+      
+               }
+                Log.d("Home", "hehehehe")
+            }
+            .addOnFailureListener {
+                Log.d("Home", "Get User Failed")
+            }
+
+
+
     }
 
     override fun onStart() {
         super.onStart()
+
 
     }
 
