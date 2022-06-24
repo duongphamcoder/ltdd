@@ -2,6 +2,7 @@ package com.example.thi_ck
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -34,6 +35,8 @@ class ChatWithFriendActivity:AppCompatActivity() {
         edittext_mess = findViewById(R.id.edittext_mess)
         recyclerView = findViewById(R.id.recyclerview_chat)
         handleAction = HandleAction()
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
     }
 
     override fun onStart() {
@@ -61,7 +64,7 @@ class ChatWithFriendActivity:AppCompatActivity() {
                     }
                 }
                 adapter = ChatAdapter(listChat)
-                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.smoothScrollToPosition(listChat.size)
                 recyclerView.adapter = adapter
             } else {
                 Log.d("Chat", "Current data: null")
