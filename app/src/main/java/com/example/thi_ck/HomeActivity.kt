@@ -7,12 +7,13 @@ import android.os.PersistableBundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.thi_ck.Class.HomeItem
 import com.example.thi_ck.Handle.HandleAction
+import com.example.thi_ck.ItemAdapter.HomeAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -22,8 +23,9 @@ import java.util.concurrent.CompletableFuture
 class HomeActivity : AppCompatActivity() {
     private lateinit var uid:String
     private lateinit var handle:HandleAction
-
     private lateinit var intent:Any
+    private lateinit var adapter: RecyclerView.Adapter<HomeAdapter.ViewHolder>
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,25 +34,16 @@ class HomeActivity : AppCompatActivity() {
         handle = HandleAction()
         handle.handleVerifyUserIsLogged(this)
         uid = FirebaseAuth.getInstance().currentUser?.uid.toString()
+        recyclerView = findViewById(R.id.home_recyclerview)
 
-
-
-        val db = FirebaseFirestore.getInstance().collection("users")
-        db.get()
-            .addOnSuccessListener {
-                val listChatWithFriends = ArrayList<Any>()
-//                Log.d("Home", "${listChatWithFriends}")
-               for (item in it.documents) {
-                   val x = FirebaseFirestore.getInstance().collection("messages").document(uid).collection(item["uid"].toString()).orderBy("date",Query.Direction.DESCENDING)
-      
-               }
-                Log.d("Home", "hehehehe")
-            }
-            .addOnFailureListener {
-                Log.d("Home", "Get User Failed")
-            }
-
-
+        val dataset:ArrayList<HomeItem> = ArrayList()
+        dataset.add(HomeItem("WaIdUPPfXpTbuo8zxWWeuyRhl4U2","Duong ne","test home"))
+        dataset.add(HomeItem("THIZMaV0y6OOWvrvBtxba6yUwnL2","Anh","test home"))
+        dataset.add(HomeItem("xcp61oYQVggdd9hEdKj9TZ4z8Kx2","Nhi","test home"))
+        dataset.add(HomeItem("yuUhat923MRSpw8e8aQ5Axr2IJi1","Van","test home"))
+        adapter = HomeAdapter(dataset)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = adapter
 
     }
 
