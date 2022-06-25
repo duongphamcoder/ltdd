@@ -1,6 +1,7 @@
 package com.example.thi_ck
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
@@ -75,4 +76,6 @@ class HomeActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.nav_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+
 }

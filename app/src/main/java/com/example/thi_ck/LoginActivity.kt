@@ -50,6 +50,7 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
+
         // xử lý chuyển qua trang đăng ký
         redirect_register.setOnClickListener {
             val intent = Intent(this,RegisterActivity::class.java)
